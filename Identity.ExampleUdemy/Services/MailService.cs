@@ -5,12 +5,12 @@ namespace Identity.ExampleUdemy.Services
 {
     public class MailService : IMailService
     {
-        public async Task SendMessageAsync(string to, string subject, string body, bool isBodyHtml = true,string userName = "")
+        public async Task SendMessageAsync(string to, string subject, string body, bool isBodyHtml = true,string userName = "", string confirmMessage = "")
         {
-            await SendMessageAsync(new[] { to }, subject, body, isBodyHtml,userName);
+            await SendMessageAsync(new[] { to }, subject, body, isBodyHtml,userName,confirmMessage);
         }
 
-        public async Task SendMessageAsync(string[] tos, string subject, string body, bool isBodyHtml = true,string userName = "")
+        public async Task SendMessageAsync(string[] tos, string subject, string body, bool isBodyHtml = true,string userName = "", string confirmMessage = "")
         {
 
             MailMessage mail = new();
@@ -21,7 +21,7 @@ namespace Identity.ExampleUdemy.Services
                 mail.To.Add(to);
             }
             mail.Subject = subject;
-            mail.Body = new MailFrontend().MailBody(userName);
+            mail.Body = new MailFrontend().MailBody(userName,confirmMessage);
             mail.From = new("info@ibrahimbagislar.com","IDENTİTYAPP",System.Text.Encoding.UTF8);
 
             SmtpClient smtp = new();

@@ -13,12 +13,14 @@ namespace Identity.ExampleUdemy.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMailService _mailService;
+        private readonly RoleManager<AppRole> _roleManager;
 
-        public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMailService mailService)
+        public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMailService mailService, RoleManager<AppRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mailService = mailService;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
@@ -36,19 +38,33 @@ namespace Identity.ExampleUdemy.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                Random rnd = new();
                 AppUser user = new()
                 {
                     UserName = model.UserName,
                     Email = model.Email,
                     Gender = model.Gender,
-                    ImagePath = "/deneme.jpg"
+                    ImagePath = "/deneme.jpg",
+                    ConfirmCode = rnd.Next(100000,1000000)
                 };
-
                 var identityResult = await _userManager.CreateAsync(user, model.Password);
                 if (identityResult.Succeeded)
                 {
-                    await _mailService.SendMessageAsync(model.Email, "HOŞGELDİN " + model.UserName, "IDENTITYAPP'E HOŞGELDİN " + model.UserName, true,model.UserName);
-                    await _userManager.AddToRoleAsync(user, "Member");
+                    string confirmMessage = "Email doğrulama kodunuz: " + user.ConfirmCode;
+                    await _mailService.SendMessageAsync(model.Email, "HOŞGELDİN " + model.UserName, "IDENTITYAPP'E HOŞGELDİN " + model.UserName, true,model.UserName,confirmMessage);
+
+                    var addRoleResult = await _roleManager.FindByNameAsync("Member");
+                    if (addRoleResult == null)
+                    {
+                        var role = new AppRole
+                        {
+                            Name = "Member",
+                            CreatedTime = DateTime.Now
+                        };
+                        await _roleManager.CreateAsync(role);
+                        await _userManager.AddToRoleAsync(user, "Member");
+                    }
                     await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, true);
                     return RedirectToAction("Index", "Home");
                 }
@@ -83,7 +99,6 @@ namespace Identity.ExampleUdemy.Controllers
                     {
                         return Redirect(model.ReturnUrl);
                     }
-
                     var user = await _userManager.FindByNameAsync(model.UserName);
                     var userRole = await _userManager.GetRolesAsync(user);
                     if (userRole.Contains("Admin"))

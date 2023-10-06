@@ -39,7 +39,6 @@ namespace Identity.ExampleUdemy.Controllers
                 {
                     ModelState.AddModelError("", error.Description);
                 }
-
             }
             else if (model.IsCurrentPasswordMatch() == true && checkPassword == true)
             {
