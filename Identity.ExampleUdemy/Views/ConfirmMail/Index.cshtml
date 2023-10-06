@@ -1,0 +1,23 @@
+﻿@model ConfirmMailViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<form asp-action="Index" method="post" class="p-3 mx-auto w-75 shadow">
+    <div class="mb-3">
+        <input type="hidden" asp-for="@Model.Email" value="@ViewBag.Email">
+        <input type="hidden" asp-for="@Model.Id" value="@ViewBag.Id" />
+
+        <label>@TempData["Mail"] mail adresinize gelen kodu giriniz:</label>
+        <span class="text-danger" asp-validation-for="@Model.ConfirmCode"></span>
+        <input asp-for="@Model.ConfirmCode" class="form-control" type="text" />
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Onayla</button>
+    </div>
+    <div class="text-danger mt-4" asp-validation-summary="ModelOnly">
+    </div>
+</form>
+

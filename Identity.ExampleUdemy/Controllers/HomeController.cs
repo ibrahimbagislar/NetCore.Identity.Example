@@ -23,9 +23,17 @@ namespace Identity.ExampleUdemy.Controllers
             _roleManager = roleManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-
+            if (User.Identity.IsAuthenticated)
+            {
+                var appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                TempData["Mail"] = appUser.Email;
+                var checkConfirmMail = await _userManager.IsEmailConfirmedAsync(appUser);
+                if (checkConfirmMail)
+                    return View();
+                return RedirectToAction("Index", "ConfirmMail");
+            }
             return View();
         }
         [HttpGet]
@@ -46,14 +54,14 @@ namespace Identity.ExampleUdemy.Controllers
                     Email = model.Email,
                     Gender = model.Gender,
                     ImagePath = "/deneme.jpg",
-                    ConfirmCode = rnd.Next(100000,1000000)
+                    ConfirmCode = rnd.Next(100000, 1000000)
                 };
+                TempData["Mail"] = model.Email;
                 var identityResult = await _userManager.CreateAsync(user, model.Password);
                 if (identityResult.Succeeded)
                 {
                     string confirmMessage = "Email doğrulama kodunuz: " + user.ConfirmCode;
-                    await _mailService.SendMessageAsync(model.Email, "HOŞGELDİN " + model.UserName, "IDENTITYAPP'E HOŞGELDİN " + model.UserName, true,model.UserName,confirmMessage);
-
+                    await _mailService.SendMessageAsync(model.Email, "HOŞGELDİN " + model.UserName, "IDENTITYAPP'E HOŞGELDİN " + model.UserName, true, model.UserName, confirmMessage);
                     var addRoleResult = await _roleManager.FindByNameAsync("Member");
                     if (addRoleResult == null)
                     {
@@ -66,7 +74,8 @@ namespace Identity.ExampleUdemy.Controllers
                         await _userManager.AddToRoleAsync(user, "Member");
                     }
                     await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, true);
-                    return RedirectToAction("Index", "Home");
+
+                    return RedirectToAction("Index", "ConfirmMail");
                 }
                 foreach (var error in identityResult.Errors)
                 {
@@ -112,7 +121,7 @@ namespace Identity.ExampleUdemy.Controllers
                     // hesap kilitli durumu
                     var lockoutEndDate = await _userManager.GetLockoutEndDateAsync(appUser);
 
-                    ModelState.AddModelError("",$"Çok fazla yanlış deneme sonucu hesabınız {(lockoutEndDate.Value.UtcDateTime - DateTime.UtcNow).Minutes} dakika kısıtlandı.");
+                    ModelState.AddModelError("", $"Çok fazla yanlış deneme sonucu hesabınız {(lockoutEndDate.Value.UtcDateTime - DateTime.UtcNow).Minutes} dakika kısıtlandı.");
                     return View(model);
                 }
                 else if (signInResult.IsNotAllowed)
@@ -137,7 +146,7 @@ namespace Identity.ExampleUdemy.Controllers
                 else if (appUser != null)
                 {
                     var failedCount = await _userManager.GetAccessFailedCountAsync(appUser);
-                    if (appUser!=null && failedCount >= 5)
+                    if (appUser != null && failedCount >= 5)
                     {
                         ModelState.AddModelError("", $"{_userManager.Options.Lockout.MaxFailedAccessAttempts - failedCount} defa daha yanlış deneme yaparsanız hesabınız 5 dakika kilitlenecektir.");
                         return View(model);
