@@ -1,0 +1,41 @@
+﻿@model List<AppRole>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="mb-3">
+    <a asp-action="Create" asp-controller="Role" class="btn btn-primary">Rol Ekle</a>
+</div>
+<div style="margin-left:300px;width:1500px; height:750px" id="demo">
+    <table cellpadding="0" cellspacing="0" border="0" id="example">
+        <thead>
+            <tr>
+                <th>Rol Adı</th>
+                <th>Oluşturulma Tarihi</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.CreatedTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>

@@ -1,0 +1,33 @@
+﻿@model ChangePasswordModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<form asp-action="Index" method="post" class="p-3 mx-auto w-75 shadow">
+
+    <div class="mb-3">
+        <label>Mevcut Şifre:</label>
+        <span class="text-danger" asp-validation-for="@Model.CurrentPassword"></span>
+        <input asp-for="@Model.CurrentPassword" class="form-control" type="password" />
+    </div>
+
+    <div class="mb-3">
+        <label>Yeni Şifre:</label>
+        <span class="text-danger" asp-validation-for="@Model.NewPassword"></span>
+        <input asp-for="@Model.NewPassword" class="form-control" type="password" />
+    </div>
+
+    <div class="mb-3">
+        <label>Yeni Şifre Tekrar:</label>
+        <span class="text-danger" asp-validation-for="@Model.NewConfirmPassword"></span>
+        <input asp-for="@Model.NewConfirmPassword" class="form-control" type="password" />
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Şifreyi Değiştir</button>
+    </div>
+    <div class="text-danger mt-4" asp-validation-summary="ModelOnly">
+    </div>
+</form>

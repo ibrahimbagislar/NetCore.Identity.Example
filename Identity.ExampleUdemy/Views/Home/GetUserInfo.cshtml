@@ -1,0 +1,16 @@
+﻿@model AppUser
+@{
+    ViewData["Title"] = "deneme";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mb-3">
+    <label>Kullanıcı Adı: @Model.UserName</label>
+    <br />
+    <label>Email: @Model.Email</label>
+    <br />
+    <label>PasswordHash: @Model.PasswordHash</label>
+    <br />
+    <label>Email Doğrulandı mı?: @(!Model.EmailConfirmed ? "Doğrulanmadı" : "Doğrulandı")</label>
+</div>
+
