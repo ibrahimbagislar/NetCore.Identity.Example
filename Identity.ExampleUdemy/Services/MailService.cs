@@ -25,7 +25,7 @@ namespace Identity.ExampleUdemy.Services
             mail.From = new("info@ibrahimbagislar.com","IDENTİTYAPP",System.Text.Encoding.UTF8);
 
             SmtpClient smtp = new();
-            smtp.Credentials = new NetworkCredential("info@ibrahimbagislar.com","mailsifreniz");
+            smtp.Credentials = new NetworkCredential("info@ibrahimbagislar.com","mailsifreniz.");
             smtp.Port = 587;
             smtp.EnableSsl = false;
             smtp.Host = "mt-engine-win.guzelhosting.com";
