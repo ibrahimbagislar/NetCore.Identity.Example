@@ -1,6 +1,6 @@
 ﻿using Hangfire;
-using Identity.ExampleUdemy.Data.Entites;
-using Identity.ExampleUdemy.Services;
+using NetCore.Identity.Example.Data.Entites;
+using NetCore.Identity.Example.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Identity;

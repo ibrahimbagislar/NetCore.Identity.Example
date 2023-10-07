@@ -1,12 +1,12 @@
-﻿using Identity.ExampleUdemy.Data.Entites;
-using Identity.ExampleUdemy.Models;
-using Identity.ExampleUdemy.Services;
+﻿using NetCore.Identity.Example.Data.Entites;
+using NetCore.Identity.Example.Models;
+using NetCore.Identity.Example.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NetCore.Identity.Example.Services;
 
-namespace Identity.ExampleUdemy.Controllers
+namespace NetCore.Identity.Example.Controllers
 {
     [AutoValidateAntiforgeryToken]
     public class HomeController : Controller
@@ -36,8 +36,29 @@ namespace Identity.ExampleUdemy.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
+            var addMemberRoleResult = await _roleManager.FindByNameAsync("Member");
+            if (addMemberRoleResult == null)
+            {
+                var role = new AppRole
+                {
+                    Name = "Member",
+                    CreatedTime = DateTime.Now
+                };
+                await _roleManager.CreateAsync(role);
+            }
+            var addAdminRoleResult = await _roleManager.FindByNameAsync("Admin");
+            if (addAdminRoleResult == null)
+            {
+                var role = new AppRole
+                {
+                    Name = "Admin",
+                    CreatedTime = DateTime.Now
+                };
+                await _roleManager.CreateAsync(role);
+            }
+
             return View(new CreateUserModel());
         }
         [HttpPost]
@@ -59,19 +80,9 @@ namespace Identity.ExampleUdemy.Controllers
                 var identityResult = await _userManager.CreateAsync(user, model.Password);
                 if (identityResult.Succeeded)
                 {
-                    SendConfirmMail mail = new(_mailService,_userManager);
+                    SendConfirmMail mail = new(_mailService, _userManager);
                     await mail.SendAsync(user);
-                    var addRoleResult = await _roleManager.FindByNameAsync("Member");
-                    if (addRoleResult == null)
-                    {
-                        var role = new AppRole
-                        {
-                            Name = "Member",
-                            CreatedTime = DateTime.Now
-                        };
-                        await _roleManager.CreateAsync(role);
-                        await _userManager.AddToRoleAsync(user, "Member");
-                    }
+                    await _userManager.AddToRoleAsync(user, "Member");
                     await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, true);
 
                     return RedirectToAction("Index", "ConfirmMail");
@@ -105,7 +116,7 @@ namespace Identity.ExampleUdemy.Controllers
                 {
                     if (!string.IsNullOrWhiteSpace(model.ReturnUrl))
                     {
-                        return Redirect(model.ReturnUrl); 
+                        return Redirect(model.ReturnUrl);
                     }
                     var user = await _userManager.FindByNameAsync(model.UserName);
                     var userRole = await _userManager.GetRolesAsync(user);

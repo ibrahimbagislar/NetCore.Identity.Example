@@ -1,4 +1,4 @@
-﻿namespace Identity.ExampleUdemy.Models
+﻿namespace NetCore.Identity.Example.Models
 {
     public class RoleAssignListModel
     {

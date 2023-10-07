@@ -1,5 +1,5 @@
-﻿using Identity.ExampleUdemy.Data.Entites;
-using Identity.ExampleUdemy.Services;
+﻿using NetCore.Identity.Example.Data.Entites;
+using NetCore.Identity.Example.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

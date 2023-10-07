@@ -1,4 +1,4 @@
-﻿namespace Identity.ExampleUdemy.Services
+﻿namespace NetCore.Identity.Example.Services
 {
     public interface IMailService
     {

@@ -1,11 +1,11 @@
-﻿using Identity.ExampleUdemy.Data.Entites;
+﻿using NetCore.Identity.Example.Data.Entites;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.ExampleUdemy.TagHelpers
+namespace NetCore.Identity.Example.TagHelpers
 {
-    [HtmlTargetElement("getUserInfo")]
+    [HtmlTargetElement("getUserRoles")]
     public class GetUserInfo  : TagHelper
     {
         public int UserId { get; set; }

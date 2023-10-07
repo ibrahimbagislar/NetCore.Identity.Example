@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 
-namespace Identity.ExampleUdemy.Services
+namespace NetCore.Identity.Example.Services
 {
     public class MailService : IMailService
     {

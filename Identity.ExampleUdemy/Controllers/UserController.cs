@@ -1,24 +1,26 @@
-﻿using Identity.ExampleUdemy.Data.Contexts;
-using Identity.ExampleUdemy.Data.Entites;
-using Identity.ExampleUdemy.Models;
+﻿using NetCore.Identity.Example.Data.Contexts;
+using NetCore.Identity.Example.Data.Entites;
+using NetCore.Identity.Example.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace Identity.ExampleUdemy.Controllers
+namespace NetCore.Identity.Example.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
         public async Task<IActionResult> Index()
@@ -66,7 +68,7 @@ namespace Identity.ExampleUdemy.Controllers
             var roles = _roleManager.Roles.ToList();
 
             RoleAssignSendModel model = new();
-            List<RoleAssignListModel> list = new List<RoleAssignListModel>();
+            List<RoleAssignListModel> list = new();
 
             foreach (var role in roles)
             {
@@ -93,7 +95,6 @@ namespace Identity.ExampleUdemy.Controllers
 
             var user = _userManager.Users.SingleOrDefault(x => x.Id == model.UserId);
             var userRoles = await _userManager.GetRolesAsync(user);
-
             foreach (var role in model.Roles)
             {
                 if (role.Exist)

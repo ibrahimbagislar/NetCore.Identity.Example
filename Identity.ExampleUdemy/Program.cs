@@ -1,7 +1,7 @@
-using Identity.ExampleUdemy.CustomDescriber;
-using Identity.ExampleUdemy.Data.Contexts;
-using Identity.ExampleUdemy.Data.Entites;
-using Identity.ExampleUdemy.Services;
+using NetCore.Identity.Example.CustomDescriber;
+using NetCore.Identity.Example.Data.Contexts;
+using NetCore.Identity.Example.Data.Entites;
+using NetCore.Identity.Example.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;

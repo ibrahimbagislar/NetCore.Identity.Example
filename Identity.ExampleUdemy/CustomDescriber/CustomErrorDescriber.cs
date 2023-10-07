@@ -1,7 +1,7 @@
-﻿using Identity.ExampleUdemy.Data.Entites;
+﻿using NetCore.Identity.Example.Data.Entites;
 using Microsoft.AspNetCore.Identity;
 
-namespace Identity.ExampleUdemy.CustomDescriber
+namespace NetCore.Identity.Example.CustomDescriber
 {
     public class CustomErrorDescriber : IdentityErrorDescriber
     {

@@ -15,7 +15,7 @@
                 <th>Cinsiyet</th>
                 <th>Email Doğrulama</th>
                 <th>Hesap Kısıtı</th>
-                <th>Kullanıcı Rolü</th>
+                <th>Kullanıcı Rolleri</th>
                 <th></th>
             </tr>
         </thead>
@@ -30,7 +30,7 @@
                     <td>@(item.EmailConfirmed ? "Doğrulandı" : "Doğrulanmadı")</td>
                     <td>@(item.LockoutEnabled ? "Var" : "Yok")</td>
                     <td>
-                        <getUserInfo user-id="@item.Id"></getUserInfo>
+                        <getUserRoles user-id="@item.Id"></getUserRoles>
                     </td>
                     <td>
                         <a asp-action="AssignRole" asp-route-id="@item.Id">Assign Role</a>

@@ -1,11 +1,11 @@
-﻿using Identity.ExampleUdemy.Data.Entites;
-using Identity.ExampleUdemy.Models;
+﻿using NetCore.Identity.Example.Data.Entites;
+using NetCore.Identity.Example.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.ExampleUdemy.Controllers
+namespace NetCore.Identity.Example.Controllers
 {
     [Authorize(Roles ="Admin")]
     public class RoleController : Controller

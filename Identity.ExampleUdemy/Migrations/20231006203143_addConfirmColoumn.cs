@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Identity.ExampleUdemy.Migrations
+namespace NetCore.Identity.Example.Migrations
 {
     public partial class addConfirmColoumn : Migration
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Identity.ExampleUdemy.Models
+namespace NetCore.Identity.Example.Models
 {
     public class CreateRoleAdminModel
     {
