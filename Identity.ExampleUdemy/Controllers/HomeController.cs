@@ -105,7 +105,7 @@ namespace Identity.ExampleUdemy.Controllers
                 {
                     if (!string.IsNullOrWhiteSpace(model.ReturnUrl))
                     {
-                        return Redirect(model.ReturnUrl);
+                        return Redirect(model.ReturnUrl); 
                     }
                     var user = await _userManager.FindByNameAsync(model.UserName);
                     var userRole = await _userManager.GetRolesAsync(user);
