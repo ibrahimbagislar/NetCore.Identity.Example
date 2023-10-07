@@ -10,7 +10,7 @@
         <input type="hidden" asp-for="@Model.Email" value="@ViewBag.Email">
         <input type="hidden" asp-for="@Model.Id" value="@ViewBag.Id" />
 
-        <label>@TempData["Mail"] mail adresinize gelen kodu giriniz:</label>
+        <label>@ViewBag.Email mail adresinize gelen kodu giriniz:</label>
         <span class="text-danger" asp-validation-for="@Model.ConfirmCode"></span>
         <input asp-for="@Model.ConfirmCode" class="form-control" type="text" />
     </div>

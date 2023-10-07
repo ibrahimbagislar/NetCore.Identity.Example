@@ -7,5 +7,6 @@ namespace Identity.ExampleUdemy.Data.Entites
         public string ImagePath { get; set; }
         public string Gender { get; set; }
         public int ConfirmCode { get; set; }
+        public DateTime ConfirmCodeEndDate { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Identity.ExampleUdemy.Data.Entites;
 using Identity.ExampleUdemy.Models;
+using Identity.ExampleUdemy.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,15 +11,23 @@ namespace Identity.ExampleUdemy.Controllers
     public class ChangePasswordController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
-
-        public ChangePasswordController(UserManager<AppUser> userManager)
+        private readonly IMailService _mailService;
+        public ChangePasswordController(UserManager<AppUser> userManager, IMailService mailService)
         {
             _userManager = userManager;
+            _mailService = mailService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                var appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                var checkConfirmMail = await _userManager.IsEmailConfirmedAsync(appUser);
+                if (!checkConfirmMail)
+                    return RedirectToAction("Index", "ConfirmMail");
+            }
             return View(new ChangePasswordModel());
         }
 

@@ -4,6 +4,7 @@ using Identity.ExampleUdemy.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NetCore.Identity.Example.Services;
 
 namespace Identity.ExampleUdemy.Controllers
 {
@@ -28,11 +29,9 @@ namespace Identity.ExampleUdemy.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var appUser = await _userManager.FindByNameAsync(User.Identity.Name);
-                TempData["Mail"] = appUser.Email;
                 var checkConfirmMail = await _userManager.IsEmailConfirmedAsync(appUser);
-                if (checkConfirmMail)
-                    return View();
-                return RedirectToAction("Index", "ConfirmMail");
+                if (!checkConfirmMail)
+                    return RedirectToAction("Index", "ConfirmMail");
             }
             return View();
         }
@@ -54,14 +53,14 @@ namespace Identity.ExampleUdemy.Controllers
                     Email = model.Email,
                     Gender = model.Gender,
                     ImagePath = "/deneme.jpg",
-                    ConfirmCode = rnd.Next(100000, 1000000)
+                    ConfirmCode = rnd.Next(100000, 1000000),
+                    ConfirmCodeEndDate = DateTime.UtcNow.AddMinutes(3)
                 };
-                TempData["Mail"] = model.Email;
                 var identityResult = await _userManager.CreateAsync(user, model.Password);
                 if (identityResult.Succeeded)
                 {
-                    string confirmMessage = "Email doğrulama kodunuz: " + user.ConfirmCode;
-                    await _mailService.SendMessageAsync(model.Email, "HOŞGELDİN " + model.UserName, "IDENTITYAPP'E HOŞGELDİN " + model.UserName, true, model.UserName, confirmMessage);
+                    SendConfirmMail mail = new(_mailService,_userManager);
+                    await mail.SendAsync(user);
                     var addRoleResult = await _roleManager.FindByNameAsync("Member");
                     if (addRoleResult == null)
                     {
@@ -167,12 +166,6 @@ namespace Identity.ExampleUdemy.Controllers
         {
             var userInfo = await _userManager.FindByNameAsync(User.Identity.Name);
             return View(userInfo);
-        }
-
-        [Authorize(Roles = "Member")]
-        public IActionResult uyepanel()
-        {
-            return View();
         }
 
         [Authorize]

@@ -18,6 +18,13 @@ namespace Identity.ExampleUdemy.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                var appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                var checkConfirmMail = await _userManager.IsEmailConfirmedAsync(appUser);
+                if (!checkConfirmMail)
+                    return RedirectToAction("Index", "ConfirmMail");
+            }
             var userInfo = await _userManager.GetUserAsync(User);
             var user = new ProfileInfoModel
             {

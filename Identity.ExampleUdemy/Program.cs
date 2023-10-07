@@ -41,7 +41,7 @@ builder.Services.ConfigureApplicationCookie(opt =>
 builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddDbContext<IdentityContext>(opt =>
 {
-     opt.UseSqlServer("server=DESKTOP-N6VN4VE; database=UdemyIdentityApp; integrated security=true; TrustServerCertificate=True;");
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("MsSQL"));
 });
 
 var app = builder.Build();
