@@ -172,7 +172,7 @@ namespace Identity.ExampleUdemy.Controllers
         public async Task<IActionResult> SignOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("index", "home");
+            return RedirectToAction("SignIn", "home");
         }
 
         public IActionResult AccessDenied()
